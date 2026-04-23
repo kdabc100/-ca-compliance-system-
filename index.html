@@ -658,23 +658,23 @@ document.getElementById("today-lbl").textContent = fmtDate(TODAY);
 
 // ══ Persistence ══════════════════════════════════════════════════════════
 async function load(){
-  const tryGet = async k => { try{ const r=await window.storage.get(k); return r?JSON.parse(r.value):null; }catch{return null;} };
-  clients   = (await tryGet("ca4_clients"))   || [];
-  statuses  = (await tryGet("ca4_statuses"))  || {};
-  emailLog  = (await tryGet("ca4_log"))       || [];
-  settings  = (await tryGet("ca4_settings"))  || {};
-  schedLog  = (await tryGet("ca4_schedlog"))  || [];
+  const tryGet = k => { try{ const v=localStorage.getItem(k); return v?JSON.parse(v):null; }catch{return null;} };
+  clients   = tryGet("ca4_clients")   || [];
+  statuses  = tryGet("ca4_statuses")  || {};
+  emailLog  = tryGet("ca4_log")       || [];
+  settings  = tryGet("ca4_settings")  || {};
+  schedLog  = tryGet("ca4_schedlog")  || [];
   applySettings();
   renderAll();
   if(settings.autoSend && settings.ejsPubKey) startScheduler();
 }
 async function save(){
-  const trySet = async (k,v) => { try{ await window.storage.set(k,JSON.stringify(v)); }catch{} };
-  await trySet("ca4_clients", clients);
-  await trySet("ca4_statuses", statuses);
-  await trySet("ca4_log", emailLog);
-  await trySet("ca4_settings", settings);
-  await trySet("ca4_schedlog", schedLog);
+  const trySet = (k,v) => { try{ localStorage.setItem(k,JSON.stringify(v)); }catch{} };
+  trySet("ca4_clients", clients);
+  trySet("ca4_statuses", statuses);
+  trySet("ca4_log", emailLog);
+  trySet("ca4_settings", settings);
+  trySet("ca4_schedlog", schedLog);
 }
 
 // ══ Helpers ═══════════════════════════════════════════════════════════════
